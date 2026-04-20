@@ -8,7 +8,7 @@ router.get('/', treeController.getAllTrees);
 // Create tree
 router.post('/trees', treeController.addTree);
 
-// Update tree (POST) - vẫn giữ vì modal submit bằng POST
+// Update tree (chỉ giữ POST vì modal submit bằng form POST)
 router.post('/trees/edit/:id', treeController.updateTree);
 
 // Delete tree
