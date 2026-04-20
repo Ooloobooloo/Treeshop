@@ -1,0 +1,39 @@
+<!-- views/partials/vertical_nav.ejs -->
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <div class="app-brand demo">
+    <a href="/" class="app-brand-link">
+      <span class="app-brand-text demo menu-text fw-semibold ms-2">TreeShop</span>
+    </a>
+  </div>
+  <div class="menu-inner-shadow"></div>
+  
+  <ul class="menu-inner py-1">
+    <!-- Dashboard -->
+    <li class="menu-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
+      <a href="/" class="menu-link">
+        <i class="menu-icon tf-icons ri-home-smile-line"></i>
+        <div>Dashboard</div>
+      </a>
+    </li>
+
+    <!-- Tree Management -->
+    <li class="menu-item <%= currentPage === 'trees' ? 'active open' : '' %>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons ri-leaf-fill"></i>
+        <div>Tree Management</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item <%= subPage === 'list' ? 'active' : '' %>">
+          <a href="/" class="menu-link">
+            <div>Tree List</div>
+          </a>
+        </li>
+        <li class="menu-item <%= subPage === 'add' ? 'active' : '' %>">
+          <a href="#add-tree" class="menu-link">
+            <div>Add New Tree</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>

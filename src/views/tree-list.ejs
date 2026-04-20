@@ -2,188 +2,232 @@
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr"
   data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template" data-style="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-  <title>Tree List | Materio</title>
-  <meta name="description" content="Tree Management" />
-
-  <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/vendor/fonts/remixicon/remixicon.css" />
-  <link rel="stylesheet" href="/assets/vendor/libs/node-waves/node-waves.css" />
-  <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
-  <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
-  <link rel="stylesheet" href="/assets/css/demo.css" />
-  <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
-  <script src="/assets/vendor/js/helpers.js"></script>
-  <script src="/assets/vendor/js/template-customizer.js"></script>
-  <script src="/assets/js/config.js"></script>
+  <%- include('partials/header') %>
 </head>
 <body>
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-          <a href="/" class="app-brand-link">
-            <span class="app-brand-text demo menu-text fw-semibold ms-2">TreeShop</span>
-          </a>
-        </div>
-        <div class="menu-inner-shadow"></div>
-        <ul class="menu-inner py-1">
-          <li class="menu-item active">
-            <a href="/" class="menu-link">
-              <i class="menu-icon tf-icons ri-home-smile-line"></i>
-              <div>Dashboard</div>
-            </a>
-          </li>
-        </ul>
-      </aside>
+
+      <!-- Vertical Navigation -->
+      <%- include('partials/vertical_nav', { 
+        currentPage: 'trees', 
+        subPage: 'list' 
+      }) %>
 
       <div class="layout-page">
-        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme">
-          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-            <h5 class="mb-0">Materio UI Playground</h5>
-          </div>
-        </nav>
+
+        <!-- Không có top navbar như yêu cầu -->
 
         <div class="content-wrapper">
           <div class="container-xxl flex-grow-1 container-p-y">
+
             <% if (error) { %>
               <div class="alert alert-warning mb-4"><%= error %></div>
             <% } %>
 
-            <div class="card mb-6">
-              <h5 class="card-header">Add Tree</h5>
-              <div class="card-body">
-                <form action="/trees" method="POST">
-  <div class="row g-4">
-    <div class="col-md-4">
-      <label class="form-label">Name</label>
-      <input class="form-control" type="text" name="name" placeholder="Tree Name" required>
-    </div>
-    <div class="col-md-4">
-      <label class="form-label">Description</label>
-      <input class="form-control" type="text" name="description" placeholder="Description" required>
-    </div>
-    <div class="col-md-4">
-      <label class="form-label">Image URL (Link ảnh)</label>
-      <input class="form-control" type="url" name="image" 
-             placeholder="https://example.com/tree.jpg" 
-             title="Dán link ảnh từ mạng hoặc cloud">
-      <small class="text-muted">Ví dụ: https://i.imgur.com/abc123.jpg</small>
-    </div>
-  </div>
-  <div class="mt-4 d-flex gap-2">
-    <button type="submit" class="btn btn-primary">Add Tree</button>
-    <button type="submit" formaction="/reset" class="btn btn-outline-danger">Reset All</button>
-  </div>
-</form>
-              </div>
-            </div>
-            <div class="card">
-              <h5 class="card-header">Tree List</h5>
-              <div class="table-responsive text-nowrap">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Tree Name</th>
-                      <th>Description</th>
-                      <th>Image</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table-border-bottom-0">
-  <!-- Optional: Row mẫu (có thể xóa nếu không cần) -->
-  <!-- <tr>
-    <td><i class="ri-suitcase-2-line ri-22px text-danger me-4"></i><span>Tours Project</span></td>
-    <td>Albert Cook</td>
-    <td>...</td>
-    ...
-  </tr> -->
+            <h4 class="mb-4 fw-semibold">Tree Management</h4>
 
-  <% if (trees && trees.length > 0) { %>
-    <% trees.forEach(tree => { %>
-      <tr>
-        <!-- Tree Name -->
-        <td>
-          <i class="ri-leaf-fill ri-22px text-success me-4"></i>
-          <span><%= tree.name %></span>
-        </td>
-
-        <!-- Description -->
-        <td><%= tree.description || 'Chưa có mô tả' %></td>
-
-        <!-- Image -->
-       <td>
-  <% if (tree.image) { %>
-    <img 
-      src="<%= tree.image %>" 
-      alt="<%= tree.name %>" 
-      class="rounded" 
-      style="max-height: 60px; width: auto; object-fit: cover;"
-      onerror="this.onerror=null; this.src='https://placehold.co/100x60?text=No+Image';">
-  <% } else { %>
-    <span class="text-muted">-</span>
-  <% } %>
-</td>
-
-        <!-- Status -->
-        <td>
-          <span class="badge rounded-pill bg-label-success me-1">Saved</span>
-        </td>
-
-        <!-- Actions -->
-        <td>
-          <div class="dropdown">
-            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-              <i class="ri-more-2-line"></i>
-            </button>
-            <div class="dropdown-menu">
-              <!-- Edit - sẽ làm sau -->
-              <a class="dropdown-item waves-effect" href="/trees/edit/<%= tree._id %>">
-                <i class="ri-pencil-line me-1"></i> Edit
-              </a>
-              <!-- Delete -->
-              <form action="/trees/delete/<%= tree._id %>" method="POST" style="display: inline;">
-                <button type="submit" class="dropdown-item text-danger waves-effect" 
-                        onclick="return confirm('Bạn có chắc muốn xóa cây <%= tree.name %>?')">
-                  <i class="ri-delete-bin-6-line me-1"></i> Delete
+            <!-- 2 Tabs nội dung -->
+            <ul class="nav nav-pills mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="list-tab" data-bs-toggle="tab" 
+                        data-bs-target="#list-tab-pane" type="button" role="tab">
+                  <i class="ri-list-check-2 ri-20px me-2"></i> Tree List
                 </button>
-              </form>
-            </div>
-          </div>
-        </td>
-      </tr>
-    <% }) %>
-  <% } else { %>
-    <tr>
-      <td colspan="5" class="text-center py-4 text-muted">
-        Chưa có cây nào. Hãy thêm cây mới ở form bên trên.
-      </td>
-    </tr>
-  <% } %>
-</tbody>
-                </table>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="add-tab" data-bs-toggle="tab" 
+                        data-bs-target="#add-tab-pane" type="button" role="tab">
+                  <i class="ri-add-circle-line ri-20px me-2"></i> Add New Tree
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <!-- Tab 1: Tree List -->
+              <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="table-responsive text-nowrap">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Tree Name</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                          <% if (trees && trees.length > 0) { %>
+                            <% trees.forEach(tree => { %>
+                              <tr>
+                                <td>
+                                  <i class="ri-leaf-fill ri-22px text-success me-4"></i>
+                                  <%= tree.name %>
+                                </td>
+                                <td><%= tree.description || 'Chưa có mô tả' %></td>
+                                <td>
+                                  <% if (tree.image) { %>
+                                    <img src="<%= tree.image %>" alt="<%= tree.name %>" 
+                                         class="rounded" 
+                                         style="max-height: 60px; width: auto; object-fit: cover;"
+                                         onerror="this.onerror=null; this.src='https://placehold.co/100x60?text=No+Image';">
+                                  <% } else { %>
+                                    <span class="text-muted">-</span>
+                                  <% } %>
+                                </td>
+                                <td>
+                                  <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                      <i class="ri-more-2-line"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <a class="dropdown-item waves-effect" href="/trees/edit/<%= tree._id %>">
+                                        <i class="ri-pencil-line me-1"></i> Edit
+                                      </a>
+                                      <form action="/trees/delete/<%= tree._id %>" method="POST" style="display: inline;">
+                                        <button type="submit" class="dropdown-item text-danger waves-effect"
+                                                onclick="return confirm('Bạn có chắc muốn xóa cây <%= tree.name %>?')">
+                                          <i class="ri-delete-bin-6-line me-1"></i> Delete
+                                        </button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            <% }) %>
+                          <% } else { %>
+                            <tr>
+                              <td colspan="4" class="text-center py-4 text-muted">
+                                Chưa có cây nào. Hãy thêm cây mới ở tab "Add New Tree".
+                              </td>
+                            </tr>
+                          <% } %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2: Add New Tree -->
+              <div class="tab-pane fade" id="add-tab-pane" role="tabpanel">
+                <div class="card">
+                  <h5 class="card-header">Add New Tree</h5>
+                  <div class="card-body">
+                    <form action="/trees" method="POST">
+                      <div class="row g-4">
+                        <div class="col-md-4">
+                          <label class="form-label">Name</label>
+                          <input class="form-control" type="text" name="name" placeholder="Tree Name" required>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">Description</label>
+                          <input class="form-control" type="text" name="description" placeholder="Description" required>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">Image URL</label>
+                          <input class="form-control" type="url" name="image" 
+                                 placeholder="https://i.imgur.com/abc123.jpg">
+                          <small class="text-muted">Dán link ảnh trực tiếp từ mạng</small>
+                        </div>
+                      </div>
+                      <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Add Tree</button>
+                        <button type="submit" formaction="/reset" class="btn btn-outline-danger">Reset All</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
-    <div class="layout-overlay layout-menu-toggle"></div>
-    <div class="drag-target"></div>
   </div>
 
-  <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-  <script src="/assets/vendor/libs/popper/popper.js"></script>
-  <script src="/assets/vendor/js/bootstrap.js"></script>
-  <script src="/assets/vendor/libs/node-waves/node-waves.js"></script>
-  <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-  <script src="/assets/vendor/libs/hammer/hammer.js"></script>
-  <script src="/assets/vendor/js/menu.js"></script>
-  <script src="/assets/js/main.js"></script>
+  <%- include('partials/footer') %>
+
+<!-- Edit Tree Modal -->
+<div class="modal fade" id="editTreeModal" tabindex="-1" aria-labelledby="editTreeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTreeModalLabel">Edit Tree</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editTreeForm" action="" method="POST">
+          <input type="hidden" id="treeId" name="id">
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="form-label">Tree Name</label>
+              <input type="text" class="form-control" id="editName" name="name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Description</label>
+              <input type="text" class="form-control" id="editDescription" name="description" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Image URL (Link ảnh)</label>
+              <input type="url" class="form-control" id="editImage" name="image" 
+                     placeholder="https://i.imgur.com/abc123.jpg">
+              <small class="text-muted">Để trống nếu muốn giữ nguyên ảnh cũ</small>
+            </div>
+          </div>
+
+          <!-- Preview ảnh hiện tại -->
+          <div class="mt-4" id="currentImagePreview" style="display: none;">
+            <p><strong>Ảnh hiện tại:</strong></p>
+            <img id="previewImage" src="" alt="" 
+                 style="max-height: 180px; border-radius: 8px; border: 1px solid #ddd;" 
+                 onerror="this.style.display='none';">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openEditModal(id, name, description, image) {
+  document.getElementById('treeId').value = id;
+  document.getElementById('editName').value = name;
+  document.getElementById('editDescription').value = description;
+  document.getElementById('editImage').value = image || '';
+
+  // Hiển thị preview ảnh hiện tại
+  const previewDiv = document.getElementById('currentImagePreview');
+  const previewImg = document.getElementById('previewImage');
+  
+  if (image) {
+    previewImg.src = image;
+    previewDiv.style.display = 'block';
+  } else {
+    previewDiv.style.display = 'none';
+  }
+
+  // Đặt action form động
+  document.getElementById('editTreeForm').action = `/trees/edit/${id}`;
+
+  // Mở modal
+  const modal = new bootstrap.Modal(document.getElementById('editTreeModal'));
+  modal.show();
+}
+
+function submitEditForm() {
+  document.getElementById('editTreeForm').submit();
+}
+</script>
+
+
+
 </body>
 </html>
