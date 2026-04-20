@@ -9,7 +9,7 @@
     <div class="layout-container">
 
       <!-- Vertical Navigation -->
-      <%- include('partials/vertical_nav', { currentPage: 'trees' }) %>
+      <%- include('partials/vertical_nav', { currentPage: 'trees', subPage: 'list' }) %>
 
       <div class="layout-page">
         <div class="content-wrapper">
@@ -172,7 +172,16 @@
         document.getElementById('treeListContent').style.display = 'none';
         document.getElementById('addTreeContent').style.display = 'block';
       }
+
+      // Cập nhật active state trên nav
+      document.getElementById('nav-list').classList.toggle('active', tab === 'list');
+      document.getElementById('nav-add').classList.toggle('active', tab === 'add');
     }
+
+    // Set active mặc định khi trang load
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('nav-list').classList.add('active');
+    });
 
     // Mở Modal Edit
     function openEditModal(id, name, description, image) {
