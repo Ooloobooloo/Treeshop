@@ -59,25 +59,28 @@
               <h5 class="card-header">Add Tree</h5>
               <div class="card-body">
                 <form action="/trees" method="POST">
-                  <div class="row g-4">
-                    <div class="col-md-4">
-                      <label class="form-label">Name</label>
-                      <input class="form-control" type="text" name="name" placeholder="Tree Name">
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">Description</label>
-                      <input class="form-control" type="text" name="description" placeholder="Description">
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">Image filename</label>
-                      <input class="form-control" type="text" name="image" placeholder="tree.png">
-                    </div>
-                  </div>
-                  <div class="mt-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                    <button type="submit" formaction="/reset" class="btn btn-outline-danger">Reset All</button>
-                  </div>
-                </form>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <label class="form-label">Name</label>
+      <input class="form-control" type="text" name="name" placeholder="Tree Name" required>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Description</label>
+      <input class="form-control" type="text" name="description" placeholder="Description" required>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Image URL (Link ảnh)</label>
+      <input class="form-control" type="url" name="image" 
+             placeholder="https://example.com/tree.jpg" 
+             title="Dán link ảnh từ mạng hoặc cloud">
+      <small class="text-muted">Ví dụ: https://i.imgur.com/abc123.jpg</small>
+    </div>
+  </div>
+  <div class="mt-4 d-flex gap-2">
+    <button type="submit" class="btn btn-primary">Add Tree</button>
+    <button type="submit" formaction="/reset" class="btn btn-outline-danger">Reset All</button>
+  </div>
+</form>
               </div>
             </div>
             <div class="card">
@@ -93,39 +96,76 @@
                     </tr>
                   </thead>
                   <tbody class="table-border-bottom-0">
-                    <tr>
-                      <td><i class="ri-suitcase-2-line ri-22px text-danger me-4"></i><span>Tours Project</span></td>
-                      <td>Albert Cook</td>
-                      <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                          <li class="avatar avatar-xs pull-up"><img src="/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle"></li>
-                          <li class="avatar avatar-xs pull-up"><img src="/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle"></li>
-                          <li class="avatar avatar-xs pull-up"><img src="/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></li>
-                        </ul>
-                      </td>
-                      <td><span class="badge rounded-pill bg-label-primary me-1">Active</span></td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line"></i></button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="ri-pencil-line me-1"></i> Edit</a>
-                            <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="ri-delete-bin-6-line me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <% if (trees && trees.length > 0) { %>
-                      <% trees.forEach(tree => { %>
-                        <tr>
-                          <td><i class="ri-leaf-fill ri-22px text-success me-4"></i><span><%= tree.name %></span></td>
-                          <td>Local Data</td>
-                          <td>-</td>
-                          <td><span class="badge rounded-pill bg-label-success me-1">Saved</span></td>
-                          <td>-</td>
-                        </tr>
-                      <% }) %>
-                    <% } %>
-                  </tbody>
+  <!-- Optional: Row mẫu (có thể xóa nếu không cần) -->
+  <!-- <tr>
+    <td><i class="ri-suitcase-2-line ri-22px text-danger me-4"></i><span>Tours Project</span></td>
+    <td>Albert Cook</td>
+    <td>...</td>
+    ...
+  </tr> -->
+
+  <% if (trees && trees.length > 0) { %>
+    <% trees.forEach(tree => { %>
+      <tr>
+        <!-- Tree Name -->
+        <td>
+          <i class="ri-leaf-fill ri-22px text-success me-4"></i>
+          <span><%= tree.name %></span>
+        </td>
+
+        <!-- Description -->
+        <td><%= tree.description || 'Chưa có mô tả' %></td>
+
+        <!-- Image -->
+       <td>
+  <% if (tree.image) { %>
+    <img 
+      src="<%= tree.image %>" 
+      alt="<%= tree.name %>" 
+      class="rounded" 
+      style="max-height: 60px; width: auto; object-fit: cover;"
+      onerror="this.onerror=null; this.src='https://placehold.co/100x60?text=No+Image';">
+  <% } else { %>
+    <span class="text-muted">-</span>
+  <% } %>
+</td>
+
+        <!-- Status -->
+        <td>
+          <span class="badge rounded-pill bg-label-success me-1">Saved</span>
+        </td>
+
+        <!-- Actions -->
+        <td>
+          <div class="dropdown">
+            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+              <i class="ri-more-2-line"></i>
+            </button>
+            <div class="dropdown-menu">
+              <!-- Edit - sẽ làm sau -->
+              <a class="dropdown-item waves-effect" href="/trees/edit/<%= tree._id %>">
+                <i class="ri-pencil-line me-1"></i> Edit
+              </a>
+              <!-- Delete -->
+              <form action="/trees/delete/<%= tree._id %>" method="POST" style="display: inline;">
+                <button type="submit" class="dropdown-item text-danger waves-effect" 
+                        onclick="return confirm('Bạn có chắc muốn xóa cây <%= tree.name %>?')">
+                  <i class="ri-delete-bin-6-line me-1"></i> Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% }) %>
+  <% } else { %>
+    <tr>
+      <td colspan="5" class="text-center py-4 text-muted">
+        Chưa có cây nào. Hãy thêm cây mới ở form bên trên.
+      </td>
+    </tr>
+  <% } %>
+</tbody>
                 </table>
               </div>
             </div>

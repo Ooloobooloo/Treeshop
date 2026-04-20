@@ -31,11 +31,12 @@ async function getTreeById(id) {
 }
 
 // Update a tree by ID
+
 async function updateTree(id, treeData) {
     if (!isDbReady()) {
         throw new Error('Database is offline. UI-only mode is active.');
     }
-    return await Tree.findByIdAndUpdate(id, treeData, { new: true });
+    return await Tree.findByIdAndUpdate(id, treeData, { returnDocument: 'after' });
 }
 
 // Delete a tree by ID
